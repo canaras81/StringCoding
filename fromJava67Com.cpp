@@ -35,7 +35,7 @@ void createCharCountMapForString(map<char,int> &m, string str){
     }
 }
 
-void findMaxOccurringChar(string str){
+void findMaxOccurringCharInString(string str){
     map<char, int> numchars_map;
     int strsize = str.size();
     createCharCountMapForString(numchars_map, str);
@@ -54,6 +54,34 @@ void findMaxOccurringChar(string str){
     cout << "(" << maxOccur << " times)" << endl;
 }
 
+void removeDupesFromString(string &str){
+    map<char, int> numchars_map;
+    int strsize = str.size();
+    createCharCountMapForString(numchars_map, str);
+    // If the number of occurences in the map is greater than 1, erase the character
+    for(string::iterator it = str.begin(); it != str.end(); 1){
+        if(numchars_map.find(*it)->second != 1){
+            it = str.erase(it);
+        }
+        else
+            it++;
+    }
+    cout << "String after the removal of duplicate characters: \"" << str << "\"" << endl;
+}
+
+void findDupesInString(string str){
+    map<char, int> numchars_map;
+    int strsize = str.size();
+    createCharCountMapForString(numchars_map, str);
+    cout << "Duplicated characters are: ";
+    // If the number of occurences in the map is greater than 1, print the character
+    for(map_it it = numchars_map.begin(); it != numchars_map.end(); it++){
+        if(it->second != 1)
+            cout << "'" << it->first << "' ";
+    }
+    cout << endl;
+}
+
 int main(int argc, char *argv[])
 {
     string str_in_1, str_in_2;
@@ -67,7 +95,11 @@ int main(int argc, char *argv[])
     transform(str_in_1.begin(), str_in_1.end(), str_in_1.begin(), ::tolower);
     
     // 1) How to find the maximum occurring character in given String?
-    findMaxOccurringChar(str_in_1);
+    //findMaxOccurringCharInString(str_in_1);
+    // 2) Remove duplicates (characters that show up 2 or more times)
+    // removeDupesFromString(str_in_1);
+    // 3) Find the duplicate characters in a string
+    //findDupesInString(str_in_1);
 
     return 0;
 }
