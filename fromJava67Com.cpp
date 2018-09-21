@@ -71,7 +71,6 @@ void removeDupesFromString(string &str){
 
 void findDupesInString(string str){
     map<char, int> numchars_map;
-    int strsize = str.size();
     createCharCountMapForString(numchars_map, str);
     cout << "Duplicated characters are: ";
     // If the number of occurences in the map is greater than 1, print the character
@@ -80,6 +79,49 @@ void findDupesInString(string str){
             cout << "'" << it->first << "' ";
     }
     cout << endl;
+}
+
+void removeString2CharsFromString1(string &str1, string &str2)
+{
+    // create a map for str2
+    // for every character in str1, check if it exists in the map
+    // remove if it does
+    
+    map<char,int> numchars_map_2;
+    createCharCountMapForString(numchars_map_2, str2);
+    printCharacterCountMap(numchars_map_2);
+    for(string::iterator it=str1.begin(); it != str1.end(); 1){
+        if(numchars_map_2.find(*it) == numchars_map_2.end())
+            it++;
+        else
+            it = str1.erase(it);
+    }
+    cout << "LHString after the removal of characters of RHString: " << str1 << endl;
+}
+
+void boolRotationStrings(string str1, string str2){
+    // take the first letter from the first string
+    // for every character found in str2, create a new string in which
+    // the found character is the first character of the new string and
+    // once the end of the second string is reached, wrap to the start
+    // and add the remaining characters
+    // then compare with str1
+    char c = str1[0];
+    int strlen_2 = str2.size();
+    for(int i=0; i<strlen_2; i++){
+        if(c == str2[i]){
+            // create the new string here
+            string str_help;
+            str_help.assign(str2, i, strlen_2-i);
+            str_help.append(str2, 0, i-1);
+            int is_rotation = str1.compare(str_help);
+            if(is_rotation == 1){
+                cout << "The strings ARE rotations of each other." << endl;
+                return;
+            }
+        }
+    }
+    cout << "The strings ARE NOT rotations of each other." << endl;
 }
 
 int main(int argc, char *argv[])
@@ -93,13 +135,24 @@ int main(int argc, char *argv[])
     cout << endl;
     
     transform(str_in_1.begin(), str_in_1.end(), str_in_1.begin(), ::tolower);
+    transform(str_in_2.begin(), str_in_2.end(), str_in_2.begin(), ::tolower);
     
     // 1) How to find the maximum occurring character in given String?
-    //findMaxOccurringCharInString(str_in_1);
-    // 2) Remove duplicates (characters that show up 2 or more times)
+    // findMaxOccurringCharInString(str_in_1);
+    
+    // 2) How to remove all duplicates from a given string? (characters that show up 2 or more times)
     // removeDupesFromString(str_in_1);
-    // 3) Find the duplicate characters in a string
-    //findDupesInString(str_in_1);
+    // str_in_1.assign(argv[1]);
+    
+    // 3) How to print the duplicate characters from given String?
+    // findDupesInString(str_in_1);
+    
+    // 4) How to remove characters from the first String which are present in the second String?
+    // removeString2CharsFromString1(str_in_1, str_in_2);
+    // str_in_1.assign(argv[1]);
+    
+    // 5) How to check if two strings are rotations of each other?
+    // boolRotationStrings(str_in_1, str_in_2);
 
     return 0;
 }
