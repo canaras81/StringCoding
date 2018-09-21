@@ -7,9 +7,11 @@ Write your code in this editor and press "Run" button to compile and execute it.
 *******************************************************************************/
 
 #include <iostream>
+#include <sstream>
 #include <map>
 #include <string>
 #include <algorithm>
+#include <stack>
 
 using namespace std;
 typedef map<char,int>::iterator map_it;
@@ -124,6 +126,40 @@ void boolRotationStrings(string str1, string str2){
     cout << "The strings ARE NOT rotations of each other." << endl;
 }
 
+void reverseStringRecursiveHelper(string str, stringstream &ss){
+    if(str.size() == 0)
+        return;
+    else
+    {
+        ss << str[str.size()-1];
+        str.pop_back();
+        reverseStringRecursiveHelper(str, ss);
+    }
+}
+
+void reverseStringRecursive(string &str){
+    cout << "Reverse of " << str << " is ";
+    stringstream ss(str);
+    reverseStringRecursiveHelper(str, ss);
+    str.assign(ss.str());
+    cout << str << endl;
+}
+
+void reverseStringIterative(string &str){
+    cout << "Reverse of " << str << " is ";
+    stack<char> char_stack;
+    int strsize = str.size();
+    for(int i=0; i < strsize; i++){
+        char_stack.push(str[i]);
+    }
+    str.clear();
+    while(char_stack.empty() == false){
+        str.append(1, char_stack.top());
+        char_stack.pop();
+    }
+    cout << str << endl;
+}
+
 int main(int argc, char *argv[])
 {
     string str_in_1, str_in_2;
@@ -137,6 +173,9 @@ int main(int argc, char *argv[])
     transform(str_in_1.begin(), str_in_1.end(), str_in_1.begin(), ::tolower);
     transform(str_in_2.begin(), str_in_2.end(), str_in_2.begin(), ::tolower);
     
+    // Questions and answers are also here:
+    // http://www.java67.com/2018/04/21-string-programming-and-coding-interview-questions-answers.html
+    //
     // 1) How to find the maximum occurring character in given String?
     // findMaxOccurringCharInString(str_in_1);
     
@@ -153,6 +192,12 @@ int main(int argc, char *argv[])
     
     // 5) How to check if two strings are rotations of each other?
     // boolRotationStrings(str_in_1, str_in_2);
+    
+    // 6/7) Reverse a string recursively and non-recursively
+    // reverseStringRecursive(str_in_1);
+    // reverseStringIterative(str_in_2);
+    // str_in_1.assign(argv[1]);
+    // str_in_2.assign(argv[2]);
 
     return 0;
 }
