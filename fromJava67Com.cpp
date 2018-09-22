@@ -1,14 +1,13 @@
 /******************************************************************************
-
                               Online C++ Compiler.
                Code, Compile, Run and Debug C++ program online.
 Write your code in this editor and press "Run" button to compile and execute it.
-
 *******************************************************************************/
 
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <set>
 #include <string>
 #include <algorithm>
 #include <stack>
@@ -118,12 +117,12 @@ void boolRotationStrings(string str1, string str2){
             str_help.append(str2, 0, i-1);
             int is_rotation = str1.compare(str_help);
             if(is_rotation == 1){
-                cout << "The strings ARE rotations of each other." << endl;
+                cout << str1 << " and " << str2 << " ARE rotations of each other." << endl;
                 return;
             }
         }
     }
-    cout << "The strings ARE NOT rotations of each other." << endl;
+    cout << str1 << " and " << str2 << " ARE NOT rotations of each other." << endl;
 }
 
 void reverseStringRecursiveHelper(string str, stringstream &ss){
@@ -160,6 +159,54 @@ void reverseStringIterative(string &str){
     cout << str << endl;
 }
 
+void printStrPermutations(string str){
+    // Using sets instead of stacks here would make this much faster as the 
+    // number of repeating characters in the input string increased. 
+    stack<string> str_stack;
+    stack<string> str_stack_2;
+    ///
+    char elem = str[str.size()-1];
+    str.pop_back();
+    string curr_str;
+    curr_str.push_back(elem);
+    str_stack.push(curr_str);
+    while(str.size() > 0){
+        char elem = str[str.size()-1];
+        str.pop_back();
+        while(str_stack.empty() == false){
+            string main_str;
+            main_str.assign(str_stack.top());
+            str_stack.pop();
+            for(int i=0; i < main_str.size(); i++){
+                string curr_str;
+                curr_str.assign(main_str);
+                curr_str.insert(i, 1, elem);
+                str_stack_2.push(curr_str);
+            }
+            string curr_str;
+            curr_str.assign(main_str);
+            curr_str.push_back(elem);
+            str_stack_2.push(curr_str);
+        }
+        while(str_stack_2.empty() == false){
+            string curr_str;
+            curr_str.assign(str_stack_2.top());
+            str_stack_2.pop();
+            str_stack.push(curr_str);
+        }
+    }
+    int stack_size = str_stack.size();
+    set<string> str_set;
+    while(str_stack.empty() == false){
+        str_set.insert(str_stack.top());
+        str_stack.pop();
+    }
+    for(set<string>::iterator it = str_set.begin(); it != str_set.end(); it++){
+        cout << (*it) << ",";
+    }
+    cout << endl << stack_size << "," << str_set.size() << endl;
+}
+
 int main(int argc, char *argv[])
 {
     string str_in_1, str_in_2;
@@ -192,12 +239,20 @@ int main(int argc, char *argv[])
     
     // 5) How to check if two strings are rotations of each other?
     // boolRotationStrings(str_in_1, str_in_2);
+    // boolRotationStrings("hallelujah", "elujahhall");
     
     // 6/7) Reverse a string recursively and non-recursively
     // reverseStringRecursive(str_in_1);
     // reverseStringIterative(str_in_2);
     // str_in_1.assign(argv[1]);
     // str_in_2.assign(argv[2]);
+    
+    // 8) How to print all permutation of a String?
+    // printStrPermutations(str_in_1);
+    
+    // 9) How to find the first non-repeating character in a given String?
+    
+    // 10) How to reverse the words in a given String sentence?
 
     return 0;
 }
