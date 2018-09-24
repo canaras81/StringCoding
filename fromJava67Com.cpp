@@ -11,6 +11,8 @@ Write your code in this editor and press "Run" button to compile and execute it.
 #include <string>
 #include <algorithm>
 #include <stack>
+#include <vector>
+#include <climits>
 
 using namespace std;
 typedef map<char,int>::iterator map_it;
@@ -221,6 +223,73 @@ void findFirstNonRepeating(string str){
     cout << "There are no non-repeating characters in " << str << endl;
 }
 
+void reverseWord(vector<string> word){
+    int vecsize = word.size();
+    for(int i=vecsize-1; i>-1; i--){
+        cout << word[i] << " ";
+    }
+    cout << endl;
+}
+
+bool smallestSubstringMapChecker(map<char, int> &walk_map, map<char, int> &find_map){
+    for(map_it iter = find_map.begin(); iter != find_map.end(); iter++){
+        map_it iter2 = walk_map.find(iter->first);
+        if(iter2 == walk_map.end())
+            return false;
+        else if(iter2->second < iter->second)
+            return false;
+        else
+            continue;
+    }
+    return true;
+}
+
+void findSmallestSubstringInString(string str_find, string str_in){
+    if(str_find.size() > str_in.size()){
+        cout << "The string to find is longer than the string to search in." << endl;
+    }
+    else{
+        int min = INT_MAX;
+        int min_left = 0;
+        int min_right = str_find.size()-1;
+        int left = 0;
+        int right = 0;
+        map<char, int> walkMap;
+        map<char, int> findMap;
+        createCharCountMapForString(findMap, str_find);
+        for(int i=0; i<str_in.size(); i++){
+            char c = str_in[i];
+            map_it iter = walkMap.find(c);
+            if(iter == walkMap.end())
+                walkMap.insert(pair<char,int>(c,1));
+            else
+                iter->second++;
+            if(smallestSubstringMapChecker(walkMap, findMap) == true)
+            {
+                while(1){
+                    char c = str_in[left];
+                    left++;
+                    map_it iter = walkMap.find(c);
+                    iter->second--;
+                    if(smallestSubstringMapChecker(walkMap, findMap) == false)
+                        break;
+                }
+                right = i;
+                if(right - left + 1 < min){
+                    //cout << right << " " << left << " " << right - left + 1 << endl;
+                    min = right - left + 1;
+                    min_left = left;
+                    min_right = right;
+                }
+            }
+        }
+        for(int i=min_left-1; i<=min_right; i++){
+            cout << str_in[i];
+        }
+        cout << endl;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     string str_in_1, str_in_2;
@@ -269,6 +338,13 @@ int main(int argc, char *argv[])
     // findFirstNonRepeating(str_in_2);
     
     // 10) How to reverse the words in a given String sentence?
+    // read the word
+    // vector<string> word; for(int i=1; i<argc; i++) word.push_back(argv[i]);
+    // for(int i=0; i<word.size(); i++) cout << word[i] << " ";
+    // reverseWord(word);
+    
+    // 11) How to find the smallest substring in a given string containing all characters of another string?
+    findSmallestSubstringInString("tist", "this is a test string");
 
     return 0;
 }
