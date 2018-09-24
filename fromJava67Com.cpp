@@ -207,6 +207,20 @@ void printStrPermutations(string str){
     cout << endl << stack_size << "," << str_set.size() << endl;
 }
 
+void findFirstNonRepeating(string str){
+    map<char,int> numchars_map;
+    createCharCountMapForString(numchars_map, str);
+    int strsize = str.size();
+    for(int i=0; i<strsize; i++){
+        char c = str[i];
+        if(numchars_map.find(c)->second == 1){
+            cout << "First non-repeating character in " << str << " is " << c << endl;
+            return;
+        }
+    }
+    cout << "There are no non-repeating characters in " << str << endl;
+}
+
 int main(int argc, char *argv[])
 {
     string str_in_1, str_in_2;
@@ -251,6 +265,8 @@ int main(int argc, char *argv[])
     // printStrPermutations(str_in_1);
     
     // 9) How to find the first non-repeating character in a given String?
+    // findFirstNonRepeating(str_in_1);
+    // findFirstNonRepeating(str_in_2);
     
     // 10) How to reverse the words in a given String sentence?
 
