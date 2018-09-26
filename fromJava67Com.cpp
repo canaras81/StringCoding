@@ -13,6 +13,7 @@ Write your code in this editor and press "Run" button to compile and execute it.
 #include <stack>
 #include <vector>
 #include <climits>
+#include <cstring>
 
 using namespace std;
 typedef map<char,int>::iterator map_it;
@@ -275,19 +276,53 @@ void findSmallestSubstringInString(string str_find, string str_in){
                         break;
                 }
                 right = i;
-                if(right - left + 1 < min){
-                    //cout << right << " " << left << " " << right - left + 1 << endl;
+                if(right - left < min){
                     min = right - left + 1;
                     min_left = left;
                     min_right = right;
                 }
             }
         }
-        for(int i=min_left-1; i<=min_right; i++){
+        for(int i=min_left; i<=min_right; i++)
             cout << str_in[i];
-        }
         cout << endl;
+        //cout << min_left << " " << min_right << endl;
     }
+}
+
+string findPalindromicSubstring(string str_in){
+    int str_len = str_in.length();
+    bool dp_array[str_len][str_len];
+    memset(dp_array, 0, sizeof(dp_array));
+    // Every individual character is a palindrome of itself
+    for(int i=0; i<str_len; i++){
+        dp_array[i][i] = true;
+    }
+    // Search for and mark 2-character palindromes
+    int pal_start = 0;
+    int pal_length = 0;
+    for(int i=0; i<str_len-1; i++){
+        if(str_in[i] == str_in[i+1]){
+            dp_array[i][i+1] = true;
+            pal_start = i;
+            pal_length = 2;
+        }
+    }
+    // Fill in the dynamic programming table for all lenghts greater than 2 and less than the string length
+    for(int k=3; k<=str_len; k++){
+        for(int i=0; i<str_len-k+1; i++){
+            int j = i + k - 1;
+            if(dp_array[i+1][j-1] == true && str_in[i] == str_in[j]){
+                dp_array[i][j] = true;
+                pal_start = i;
+                pal_length = k;
+            }
+        }
+    }
+    string str_out(str_in, pal_start, pal_length);
+    if(pal_length < 2)
+        str_out.assign("No Palindromes.");
+    return str_out;
 }
 
 int main(int argc, char *argv[])
@@ -344,7 +379,14 @@ int main(int argc, char *argv[])
     // reverseWord(word);
     
     // 11) How to find the smallest substring in a given string containing all characters of another string?
-    findSmallestSubstringInString("tist", "this is a test string");
+    // findSmallestSubstringInString("tist", "this is a test string");
+    
+    // 21) How do you find the longest palindromic substring of a given substring?
+    cout << findPalindromicSubstring("abcabcdedcbaad") << endl;
+    cout << findPalindromicSubstring("aabbcc") << endl;
+    cout << findPalindromicSubstring("abcd") << endl;
 
     return 0;
 }
+
+
